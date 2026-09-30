@@ -538,6 +538,21 @@ html,body{max-width:100%;overflow-x:hidden}
   .event-time-value{font-size:36px}
 }
 
+
+/* keep the start-time block crisp */
+.event-time{
+  opacity:0;
+  filter:none !important;
+  -webkit-filter:none !important;
+}
+.event-time *{
+  filter:none !important;
+  -webkit-filter:none !important;
+}
+.location .reveal.show .event-time{
+  opacity:1;
+}
+
 </style>
 </head>
 <body>
@@ -621,7 +636,7 @@ html,body{max-width:100%;overflow-x:hidden}
       <div class="eyebrow stagger">Місце нашої зустрічі</div>
       <div class="place stagger">Ворзельська церква ЄХБ</div>
       <div class="location-rule stagger">зустрінемося тут</div>
-      <div class="event-time stagger" aria-label="Початок о 15:00">
+      <div class="event-time" aria-label="Початок о 15:00">
         <span class="event-time-label">Початок</span>
         <span class="event-time-value">15:00</span>
       </div>
