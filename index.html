@@ -245,6 +245,166 @@ h2{font:300 clamp(42px,8vw,72px)/1.03 "Cormorant Garamond",serif;letter-spacing:
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
   .reveal,.reveal .stagger,.swatch,.bigdate{opacity:1!important;transform:none!important;filter:none!important}
 }
+
+/* FINAL RESPONSIVE + MOTION POLISH */
+html,body{max-width:100%;overflow-x:hidden}
+.hero,.final{width:100%;isolation:isolate}
+.hero-inner,.final-inner{min-width:0;max-width:min(760px,100%)}
+.names,.final-names{width:100%;max-width:100%;box-sizing:border-box}
+.name,.final-names>span:not(.amp2){max-width:100%;transform-origin:center center}
+
+/* keep the calligraphy airy without letting the flourishes leave the viewport */
+.hero .names{padding:42px 28px 46px;margin:0 auto}
+.hero .name{font-size:clamp(78px,15vw,150px);padding:.34em .32em .38em;margin:-.28em -.22em}
+.final .final-names{padding:34px 28px 38px;margin:0 auto 2px;font-size:clamp(78px,15vw,150px)}
+.final .final-names>span:not(.amp2){padding:.28em .30em .34em;margin:-.22em -.20em}
+
+/* calmer, more luxurious background motion */
+.hero .soft-ribbon,.invite .soft-ribbon,.location .soft-ribbon,.final .soft-ribbon{
+  animation-duration:15s;
+}
+.hero .soft-veil,.invite .soft-veil,.location .soft-veil,.final .soft-veil{
+  animation-duration:14s;
+}
+.hero .soft-blob,.invite .soft-blob,.location .soft-blob,.dress .soft-blob,.gifts .soft-blob,.final .soft-blob{
+  animation-duration:13s;
+}
+.hero::before,.invite::before,.location::before,.final::before{
+  animation-duration:16s;
+}
+.hero::after,.location::after,.final::after{
+  animation-duration:15s,10s;
+}
+
+/* extra gentle text motion after reveal */
+.reveal.show h2,
+.reveal.show .place,
+.reveal.show .dress-copy,
+.reveal.show .gift-copy,
+.reveal.show .final-phrase{
+  animation-name:textSoftRise;
+  animation-duration:1.15s;
+  animation-timing-function:cubic-bezier(.16,.8,.2,1);
+  animation-fill-mode:both;
+}
+@keyframes textSoftRise{
+  0%{opacity:0;transform:translateY(18px);filter:blur(3px)}
+  70%{opacity:1;filter:blur(.35px)}
+  100%{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+.location .place{animation-delay:.18s}
+.location .address{will-change:transform,opacity}
+.location .reveal.show .address{animation:textSoftRise 1.05s .34s cubic-bezier(.16,.8,.2,1) both}
+.dress .reveal.show h2{animation-delay:.12s}
+.dress .reveal.show .dress-copy{animation-delay:.28s}
+.gifts .reveal.show h2{animation-delay:.14s}
+.gifts .reveal.show .gift-copy{animation-delay:.28s}
+.final .reveal.show .final-phrase{animation-delay:1.02s}
+
+/* tiny floating accent on headings, still very subtle */
+.invite h2,.location .place,.dress h2,.gifts h2,.final-phrase{position:relative}
+.invite h2::after,.dress h2::after,.gifts h2::after{
+  content:"";
+  display:block;
+  width:28px;height:1px;
+  margin:18px auto 0;
+  background:currentColor;
+  opacity:.18;
+  transform:scaleX(0);
+  transform-origin:center;
+}
+.invite .reveal.show h2::after,.dress .reveal.show h2::after,.gifts .reveal.show h2::after{
+  animation:softRuleIn 1.1s .5s ease forwards;
+}
+@keyframes softRuleIn{to{transform:scaleX(1);opacity:.22}}
+
+/* timer alignment + smoother changing numerals */
+.countdown{align-items:stretch}
+.time-box{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.time-num{
+  width:100%;
+  height:1.08em;
+  min-height:1.08em;
+  display:grid;
+  place-items:center;
+  line-height:1;
+  font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:"tnum" 1,"lnum" 1;
+}
+.time-num .digit-current,.time-num .digit-next{
+  inset:0;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  text-align:center;
+  transition:
+    transform .72s cubic-bezier(.22,.75,.25,1),
+    opacity .62s ease,
+    filter .62s ease;
+}
+.time-num .digit-next{transform:translateY(7%);opacity:0;filter:blur(1px)}
+.time-num.changing .digit-current{transform:translateY(-7%);opacity:0;filter:blur(.8px)}
+.time-num.changing .digit-next{transform:translateY(0);opacity:1;filter:blur(0)}
+
+@media (min-width:900px){
+  .hero{padding:70px 28px 64px}
+  .final{padding:92px 28px}
+  .hero-kicker{margin-bottom:30px}
+  .scroll{bottom:24px}
+  .countdown{gap:18px}
+  .time-box{padding-inline:8px}
+}
+
+@media (max-width:560px){
+  .hero{
+    min-height:100svh;
+    padding:max(54px,env(safe-area-inset-top)) 14px max(70px,calc(52px + env(safe-area-inset-bottom)));
+  }
+  .hero-inner{width:100%;max-width:100%}
+  .hero-kicker{font-size:9px;letter-spacing:3.6px;margin-bottom:24px}
+  .hero .names{padding:28px 8px 34px;margin:0 auto}
+  .hero .name{
+    font-size:clamp(58px,17.2vw,82px);
+    padding:.30em .18em .34em;
+    margin:-.20em -.10em;
+    max-width:100%;
+  }
+  .hero .amp{margin:0;font-size:16px}
+  .hero-swash{width:min(260px,78vw);height:46px}
+  .scroll{bottom:max(14px,env(safe-area-inset-bottom));font-size:6.5px}
+
+  .countdown-shell{padding:22px 8px 20px}
+  .countdown{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+  .time-box{padding:12px 2px 0}
+  .time-num{font-size:clamp(30px,9.4vw,43px);height:1.12em;min-height:1.12em}
+  .time-unit{font-size:5.8px;letter-spacing:.9px;white-space:nowrap}
+
+  .final{
+    min-height:100svh;
+    padding:max(72px,env(safe-area-inset-top)) 14px max(72px,calc(54px + env(safe-area-inset-bottom)));
+  }
+  .final-inner{width:100%;max-width:100%}
+  .final .final-names{
+    padding:26px 8px 32px;
+    margin:0 auto;
+    font-size:clamp(58px,17.2vw,82px);
+  }
+  .final .final-names>span:not(.amp2){
+    padding:.28em .18em .32em;
+    margin:-.18em -.08em;
+    max-width:100%;
+  }
+  .final .final-names .amp2{font-size:16px}
+  .final-swash{width:min(255px,76vw)}
+  .final-phrase{padding:0 8px}
+}
+
+@media (max-width:370px){
+  .hero .name,.final .final-names{font-size:56px}
+  .time-num{font-size:29px}
+}
+
 </style>
 </head>
 <body>
@@ -439,7 +599,7 @@ function animateTick(el,newValue){
   setTimeout(()=>{
     el.classList.remove('changing');
     el.innerHTML = `<span class="digit-current">${newValue}</span>`;
-  },910);
+  },740);
 }
 
 function updateCountdown(){
