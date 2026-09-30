@@ -469,6 +469,75 @@ html,body{max-width:100%;overflow-x:hidden}
   to{opacity:1;transform:translateY(0)}
 }
 
+
+/* elegant start time inside location */
+.event-time{
+  width:min(300px,86%);
+  margin:22px auto 10px;
+  padding:17px 22px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:17px;
+  border-top:1px solid rgba(72,0,0,.13);
+  border-bottom:1px solid rgba(72,0,0,.13);
+  color:var(--burgundy);
+  position:relative;
+}
+.event-time::before{
+  content:"";
+  position:absolute;
+  width:86px;
+  height:52px;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.48),rgba(232,212,187,.10) 52%,transparent 72%);
+  filter:blur(8px);
+  opacity:0;
+  pointer-events:none;
+}
+.event-time-label{
+  font:300 10px/1 "Montserrat",sans-serif;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:#8a6a5b;
+}
+.event-time-value{
+  font:300 clamp(31px,7vw,46px)/1 "Cormorant Garamond",serif;
+  letter-spacing:1.5px;
+  color:var(--burgundy);
+  font-variant-numeric:tabular-nums;
+}
+.location .reveal.show .event-time{
+  animation:eventTimeIn 1.05s .42s cubic-bezier(.16,.8,.2,1) both;
+}
+.location .reveal.show .event-time::before{
+  animation:eventTimeGlow 2.4s 1.05s ease-in-out infinite alternate;
+}
+.location .reveal.show .event-time-value{
+  animation:eventTimeValueIn 1.15s .57s cubic-bezier(.16,.8,.2,1) both;
+}
+@keyframes eventTimeIn{
+  0%{opacity:0;transform:translateY(12px);clip-path:inset(0 50% 0 50%)}
+  55%{opacity:1}
+  100%{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+}
+@keyframes eventTimeValueIn{
+  0%{opacity:0;transform:translateY(9px);letter-spacing:7px;filter:blur(2px)}
+  100%{opacity:1;transform:none;letter-spacing:1.5px;filter:blur(0)}
+}
+@keyframes eventTimeGlow{
+  from{opacity:.12;transform:translate(-50%,-50%) scale(.92)}
+  to{opacity:.58;transform:translate(-50%,-50%) scale(1.08)}
+}
+@media(max-width:560px){
+  .event-time{width:min(280px,92%);gap:14px;margin:20px auto 8px;padding:15px 18px 16px}
+  .event-time-label{font-size:8px;letter-spacing:2.4px}
+  .event-time-value{font-size:36px}
+}
+
 </style>
 </head>
 <body>
@@ -552,6 +621,10 @@ html,body{max-width:100%;overflow-x:hidden}
       <div class="eyebrow stagger">Місце нашої зустрічі</div>
       <div class="place stagger">Ворзельська церква ЄХБ</div>
       <div class="location-rule stagger">зустрінемося тут</div>
+      <div class="event-time stagger" aria-label="Початок о 15:00">
+        <span class="event-time-label">Початок</span>
+        <span class="event-time-value">15:00</span>
+      </div>
       <div class="address stagger">вул. Тюльпанова, 59<br>Ворзель</div>
       <a class="btn stagger" href="https://maps.app.goo.gl/ngh44K3Rpz1JvAC4A" target="_blank" rel="noopener">Відкрити на карті</a>
     </div>
@@ -659,7 +732,7 @@ if(calendar){
   calendarObserver.observe(calendar);
 }
 
-const target = new Date('2026-10-26T14:00:00+02:00').getTime();
+const target = new Date('2026-10-26T15:00:00+02:00').getTime();
 const ids = ['days','hours','minutes','seconds'];
 const lastValues = {};
 
