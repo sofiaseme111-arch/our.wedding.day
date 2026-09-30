@@ -405,6 +405,70 @@ html,body{max-width:100%;overflow-x:hidden}
   .time-num{font-size:29px}
 }
 
+
+/* restore a visible, font-aware calligraphy reveal on the first screen */
+.hero .name{
+  animation:none !important;
+  opacity:0;
+  transform:translateY(18px) scale(.982);
+  filter:blur(4px);
+}
+.hero .amp{
+  animation:none !important;
+  opacity:0;
+}
+.hero .hero-swash path{
+  animation:none !important;
+}
+.fonts-ready .hero .name:first-child{
+  animation:
+    calligraphyReveal 1.85s .28s cubic-bezier(.16,.82,.2,1) forwards,
+    calligraphyFloat 8s 2.35s ease-in-out infinite alternate !important;
+}
+.fonts-ready .hero .name.sofia{
+  animation:
+    calligraphyReveal 1.85s .78s cubic-bezier(.16,.82,.2,1) forwards,
+    calligraphyFloat 8s 2.85s ease-in-out infinite alternate !important;
+}
+.fonts-ready .hero .amp{
+  animation:ampSoftIn .9s .92s ease forwards !important;
+}
+.fonts-ready .hero .hero-swash path{
+  animation:drawSwash 2.15s 1.15s cubic-bezier(.25,.7,.2,1) forwards !important;
+}
+@keyframes calligraphyReveal{
+  0%{
+    opacity:0;
+    transform:translateY(18px) scale(.976);
+    filter:blur(5px);
+    text-shadow:0 0 0 rgba(72,0,0,0);
+  }
+  45%{
+    opacity:.72;
+    filter:blur(1.2px);
+  }
+  78%{
+    opacity:1;
+    transform:translateY(-1px) scale(1.003);
+    filter:blur(0);
+    text-shadow:0 5px 22px rgba(72,0,0,.045);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    filter:blur(0);
+    text-shadow:0 3px 16px rgba(72,0,0,.025);
+  }
+}
+@keyframes calligraphyFloat{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-2px)}
+}
+@keyframes ampSoftIn{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
 </style>
 </head>
 <body>
@@ -543,6 +607,19 @@ html,body{max-width:100%;overflow-x:hidden}
 </footer>
 
 <script>
+
+/* Start the hero-name animation only after the calligraphy font is ready.
+   This prevents the reveal from finishing while the webfont is still loading. */
+(function(){
+  const revealNames = () => document.documentElement.classList.add('fonts-ready');
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(revealNames).catch(revealNames);
+    setTimeout(revealNames, 1800);
+  }else{
+    window.addEventListener('load', revealNames, {once:true});
+  }
+})();
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const observer = new IntersectionObserver((entries)=>{
